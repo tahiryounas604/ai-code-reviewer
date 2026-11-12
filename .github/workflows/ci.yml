@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: pip install pytest
+      - name: Run tests
+        run: python3 -m pytest -q
+      # The rule table (rules.py) and the tests necessarily contain the
+      # very patterns the scanner detects (pattern strings, descriptions,
+      # and planted test secrets), so scanning them self-triggers by
+      # design. They are excluded here; everything else must be clean.
+      - name: Self-review (dogfood — must be clean at fail-on high)
+        run: |
+          python3 -m ai_code_reviewer . \
+            --exclude "tests/*" \
+            --exclude "ai_code_reviewer/rules.py" \
+            --fail-on high --format markdown --output self-review.md

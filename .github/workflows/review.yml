@@ -1,0 +1,25 @@
+# Example: review every pull request with ai-code-reviewer.
+# NOTE: this workflow has NOT been run live on GitHub yet — it is
+# included as the intended wiring. The action itself is a composite
+# action (see action.yml) and was verified locally only.
+name: PR Security Review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Review changed code
+        uses: ./
+        with:
+          path: "."
+          fail-on: "high"
