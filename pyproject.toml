@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-code-reviewer"
+version = "0.1.0"
+description = "Rule-based security review of source code (no LLM, no paid AI)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "GPL-3.0" }
+dependencies = []
+
+[project.scripts]
+ai-code-reviewer = "ai_code_reviewer.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
